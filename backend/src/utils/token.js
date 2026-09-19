@@ -80,17 +80,13 @@ const createSendToken = (user, statusCode, res) => {
     // token. This one line is real security, not decoration.
     httpOnly: true,
 
-    // sameSite decides whether the cookie is sent when the
-    // request comes from a different website address.
-    // On the live site the frontend and backend sit on
-    // different addresses, so we need "none".
-    // On our laptop both are localhost, so "lax" is fine.
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    // Detect production or cloud hosting (Render)
+    const isProduction =
+      process.env.NODE_ENV === "production" ||
+      Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID);
 
-    // secure: true = only send this cookie over https.
-    // On the laptop we use plain http, so it must be false
-    // there, otherwise the cookie would never arrive.
-    secure: process.env.NODE_ENV === "production",
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
   };
 
   // Step 3 - attach the cookie to the reply.

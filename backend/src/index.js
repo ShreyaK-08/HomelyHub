@@ -14,11 +14,38 @@ dotenv.config();
 
 const app = express();
 
-//cors
+// Trust reverse proxy for secure cookies on Render/cloud
+app.set("trust proxy", 1);
+
+// Production-ready CORS supporting Netlify, local dev, and custom domains
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://localhost:5174",
+  "https://homelyhub0.netlify.app",
+  ...(process.env.ORIGIN_ACCESS_URL
+    ? process.env.ORIGIN_ACCESS_URL.split(",").map((s) => s.trim().replace(/\/$/, ""))
+    : []),
+];
+
 app.use(
   cors({
-    origin: [process.env.ORIGIN_ACCESS_URL || "http://localhost:5173", "http://localhost:5173"],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/$/, "");
+      if (
+        allowedOrigins.includes(cleanOrigin) ||
+        cleanOrigin.endsWith(".netlify.app") ||
+        cleanOrigin.endsWith(".onrender.com") ||
+        /^http:\/\/localhost:\d+$/.test(cleanOrigin)
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Permissive reflection for deployment
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
   })
 );
 

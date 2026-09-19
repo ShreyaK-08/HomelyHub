@@ -91,7 +91,11 @@ const logout = (req, res) => {
   // These settings must match the login cookie exactly,
   // otherwise the browser thinks it is a different cookie
   // and the real one stays alive.
-  if (process.env.NODE_ENV === "production") {
+  const isProduction =
+    process.env.NODE_ENV === "production" ||
+    Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID);
+
+  if (isProduction) {
     cookieOptions.sameSite = "none";
     cookieOptions.secure = true;
   } else {
