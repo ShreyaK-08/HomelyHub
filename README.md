@@ -5,9 +5,12 @@
 [![Vite](https://img.shields.io/badge/Vite-6.x-purple.svg)](https://vitejs.dev/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen.svg)](https://www.mongodb.com/atlas)
 [![Groq AI](https://img.shields.io/badge/Groq%20Cloud-AI%20Trip%20Planner-orange.svg)](https://groq.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://homelyhub0.netlify.app)
 
 > **HomelyHub** is a production-ready, full-stack vacation rental booking platform inspired by Airbnb. It combines an intuitive property discovery interface, secure multi-day booking and reservation workflows, host property management, and an **AI Trip Genie** powered by **Groq Cloud (LLMs)** to generate personalized day-by-day travel itineraries with matched stays.
+
+🌐 **Live Demo:** [https://homelyhub0.netlify.app](https://homelyhub0.netlify.app)  
+⚙️ **API Endpoint:** [https://homelyhub-qjsw.onrender.com](https://homelyhub-qjsw.onrender.com)
 
 ---
 
@@ -176,8 +179,3 @@ npm run dev
 | `POST` | `/api/v1/rent/user/booking/verify-payment`| Verify payment & finalize booking | Private |
 | `GET` | `/api/v1/rent/user/booking` | Retrieve user booking history | Private |
 | `POST` | `/api/v1/rent/trip` | Generate AI travel itinerary & stays | Public / Private |
-
----
-
-## 📄 License
-This project is open source and available under the [MIT License](LICENSE).
