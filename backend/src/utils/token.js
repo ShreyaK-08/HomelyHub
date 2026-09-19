@@ -64,27 +64,17 @@ const createSendToken = (user, statusCode, res) => {
   // user._id is the id mongodb gave them.
   const token = signinToken(user._id);
 
+  // Detect production or cloud hosting (Render)
+  const isProduction =
+    process.env.NODE_ENV === "production" ||
+    Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID);
+
   // Step 2 - the rules for the cookie.
   const cookieOptions = {
-    // When should the browser throw this cookie away?
-    // Date.now() is right now in milliseconds. Then
-    // days * 24 hours * 60 minutes * 60 seconds * 1000 turns
-    // JWT_COOKIE_EXPIRES_IN (a number of days) into milliseconds.
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      Date.now() + (Number(process.env.JWT_COOKIE_EXPIRES_IN) || 90) * 24 * 60 * 60 * 1000
     ),
-
-    // httpOnly: true = JavaScript in the browser CANNOT read
-    // this cookie. Only the browser can send it back to us.
-    // This stops a bad script on the page from stealing the
-    // token. This one line is real security, not decoration.
     httpOnly: true,
-
-    // Detect production or cloud hosting (Render)
-    const isProduction =
-      process.env.NODE_ENV === "production" ||
-      Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID);
-
     sameSite: isProduction ? "none" : "lax",
     secure: isProduction,
   };
